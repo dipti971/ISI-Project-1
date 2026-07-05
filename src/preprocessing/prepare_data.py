@@ -165,8 +165,8 @@ def save_outputs(X_train, X_test, y_train, y_test,
     # Feature arrays
     np.save(os.path.join(OUTPUT_DIR, "X_train.npy"), X_train)
     np.save(os.path.join(OUTPUT_DIR, "X_test.npy"), X_test)
-    print(f"  X_train.npy  → {X_train.shape}")
-    print(f"  X_test.npy   → {X_test.shape}")
+    print(f"  X_train.npy  -> {X_train.shape}")
+    print(f"  X_test.npy   -> {X_test.shape}")
 
     # Label arrays
     np.save(os.path.join(OUTPUT_DIR, "y_train.npy"), y_train)
@@ -177,25 +177,25 @@ def save_outputs(X_train, X_test, y_train, y_test,
     # IP columns (for graph construction)
     np.save(os.path.join(OUTPUT_DIR, "ip_train.npy"), ip_train)
     np.save(os.path.join(OUTPUT_DIR, "ip_test.npy"), ip_test)
-    print(f"  ip_train.npy → {ip_train.shape}")
-    print(f"  ip_test.npy  → {ip_test.shape}")
+    print(f"  ip_train.npy -> {ip_train.shape}")
+    print(f"  ip_test.npy  -> {ip_test.shape}")
 
     # Feature names
     np.save(os.path.join(OUTPUT_DIR, "feature_names.npy"),
             np.array(feature_names))
-    print(f"  feature_names.npy → {len(feature_names)} features")
+    print(f"  feature_names.npy -> {len(feature_names)} features")
 
     # Label encoder
     le_path = os.path.join(OUTPUT_DIR, "label_encoder.pkl")
     with open(le_path, "wb") as f:
         pickle.dump(le, f)
-    print(f"  label_encoder.pkl → {list(le.classes_)}")
+    print(f"  label_encoder.pkl -> {list(le.classes_)}")
 
     # Scaler
     scaler_path = os.path.join(OUTPUT_DIR, "scaler.pkl")
     with open(scaler_path, "wb") as f:
         pickle.dump(scaler, f)
-    print(f"  scaler.pkl → saved")
+    print(f"  scaler.pkl -> saved")
 
 
 def main():
