@@ -121,7 +121,7 @@ def select_features(df, variance_thresh=0.01, correlation_thresh=0.95):
     selected_columns = df.columns.tolist()
 
     print(f"\n  Feature selection complete:")
-    print(f"    {original_count} → {final_count} features "
+    print(f"    {original_count} -> {final_count} features "
           f"(removed {original_count - final_count})")
 
     summary = {
