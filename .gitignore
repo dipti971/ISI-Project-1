@@ -13,6 +13,8 @@ env/
 # Ignore dataset files
 data/raw/*.csv
 data/processed/*.csv
+data/processed/*.npy
+data/processed/*.pkl
 
 # Keep folder structure
 !data/raw/.gitkeep
