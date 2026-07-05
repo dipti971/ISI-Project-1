@@ -72,7 +72,7 @@ def handle_labels(df):
 
     # Merge labels
     df[LABEL_COLUMN] = df[LABEL_COLUMN].replace(LABEL_MERGE)
-    print("  Merged 'Botnet - Attempted' → 'Botnet'")
+    print("  Merged 'Botnet - Attempted' -> 'Botnet'")
 
     # Show distribution
     print("\n  Label distribution:")
@@ -87,7 +87,7 @@ def handle_labels(df):
 
     print(f"\n  Encoded {len(le.classes_)} classes:")
     for idx, name in enumerate(le.classes_):
-        print(f"    {idx} → {name}")
+        print(f"    {idx} -> {name}")
 
     return y, le
 
