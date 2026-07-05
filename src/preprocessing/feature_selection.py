@@ -132,3 +132,40 @@ def select_features(df, variance_thresh=0.01, correlation_thresh=0.95):
     }
 
     return df, selected_columns, summary
+
+
+# ------------------------------------------------------------------
+# Standalone verification
+# ------------------------------------------------------------------
+if __name__ == "__main__":
+    import os, sys
+
+    DATA_PATH = os.path.join(
+        os.path.dirname(__file__), "..", "..", "data", "processed", "friday_clean.csv"
+    )
+    DATA_PATH = os.path.normpath(DATA_PATH)
+
+    if not os.path.exists(DATA_PATH):
+        print(f"Clean dataset not found at {DATA_PATH}")
+        print("Run clean_dataset.py first.")
+        sys.exit(1)
+
+    print(f"Loading {DATA_PATH} ...")
+    df = pd.read_csv(DATA_PATH)
+
+    # Keep only numeric feature columns (drop IPs, Timestamp, labels)
+    drop_cols = [
+        "Src IP dec", "Dst IP dec", "Timestamp",
+        "Label", "Attempted Category",
+    ]
+    feature_df = df.drop(columns=[c for c in drop_cols if c in df.columns])
+
+    # Replace inf with NaN then fill with 0 for variance / corr calculation
+    feature_df = feature_df.replace([np.inf, -np.inf], np.nan).fillna(0)
+
+    filtered_df, selected, summary = select_features(feature_df)
+
+    print(f"\nSelected features ({len(selected)}):")
+    for i, col in enumerate(selected, 1):
+        print(f"  {i:>3}. {col}")
+    print("\nDone.")
