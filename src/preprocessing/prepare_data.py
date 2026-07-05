@@ -171,8 +171,8 @@ def save_outputs(X_train, X_test, y_train, y_test,
     # Label arrays
     np.save(os.path.join(OUTPUT_DIR, "y_train.npy"), y_train)
     np.save(os.path.join(OUTPUT_DIR, "y_test.npy"), y_test)
-    print(f"  y_train.npy  → {y_train.shape}")
-    print(f"  y_test.npy   → {y_test.shape}")
+    print(f"  y_train.npy  -> {y_train.shape}")
+    print(f"  y_test.npy   -> {y_test.shape}")
 
     # IP columns (for graph construction)
     np.save(os.path.join(OUTPUT_DIR, "ip_train.npy"), ip_train)
