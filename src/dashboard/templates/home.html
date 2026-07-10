@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}GNN-IDS — Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Graph Neural Network<br>Intrusion Detection System</h1>
+    <p class="hero-subtitle">
+        Detecting network attacks using Graph Attention Networks on CICIDS2017 traffic data.
+        Comparing GNN-based classification against traditional ML baselines.
+    </p>
+</section>
+
+{% if stats.error %}
+<div class="alert alert-error">
+    <strong>Error loading data:</strong> {{ stats.error }}
+</div>
+{% else %}
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ "{:,}".format(stats.total_samples) }}</div>
+        <div class="stat-label">Total Flows</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "{:,}".format(stats.train_samples) }}</div>
+        <div class="stat-label">Training Samples</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "{:,}".format(stats.test_samples) }}</div>
+        <div class="stat-label">Test Samples</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.num_features }}</div>
+        <div class="stat-label">Features</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.num_classes }}</div>
+        <div class="stat-label">Classes</div>
+    </div>
+</section>
+
+<section class="content-section">
+    <h2>Class Distribution</h2>
+    <div class="distribution-grid">
+        {% for name, count in stats.class_distribution.items() %}
+        <div class="distribution-card">
+            <div class="dist-name">{{ name }}</div>
+            <div class="dist-count">{{ "{:,}".format(count) }}</div>
+            <div class="dist-bar-container">
+                <div class="dist-bar" style="width: {{ (count / stats.total_samples * 100) | round(1) }}%"></div>
+            </div>
+            <div class="dist-pct">{{ (count / stats.total_samples * 100) | round(1) }}%</div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-section">
+    <h2>Pipeline Overview</h2>
+    <div class="pipeline">
+        <div class="pipeline-step">
+            <div class="step-number">1</div>
+            <div class="step-title">Preprocessing</div>
+            <div class="step-desc">Clean, select features, normalize, stratified split</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+            <div class="step-number">2</div>
+            <div class="step-title">ML Baselines</div>
+            <div class="step-desc">Random Forest & XGBoost with class weighting</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+            <div class="step-number">3</div>
+            <div class="step-title">Graph Construction</div>
+            <div class="step-desc">IPs → nodes, flows → edges with features</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+            <div class="step-number">4</div>
+            <div class="step-title">GAT Training</div>
+            <div class="step-desc">Graph Attention Network for edge classification</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+            <div class="step-number">5</div>
+            <div class="step-title">Evaluation</div>
+            <div class="step-desc">Compare all models: accuracy, F1, AUC</div>
+        </div>
+    </div>
+</section>
+
+<section class="content-section">
+    <h2>Selected Features ({{ stats.feature_names | length }})</h2>
+    <div class="feature-list">
+        {% for fname in stats.feature_names %}
+        <span class="feature-tag">{{ fname }}</span>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %}
+{% endblock %}

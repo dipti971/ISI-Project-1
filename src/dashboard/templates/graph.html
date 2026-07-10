@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}GNN-IDS — Graph Visualization{% endblock %}
+
+{% block head %}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h1>Network Graph Visualization</h1>
+    <p class="section-subtitle">
+        A subset of the network communication graph. Each node is an IP address,
+        each edge is a network flow colored by its attack label.
+    </p>
+
+    {% if graph.error %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ graph.error }}
+    </div>
+    {% else %}
+
+    <div class="graph-stats">
+        <span class="graph-stat">Nodes: <strong>{{ graph.num_nodes }}</strong></span>
+        <span class="graph-stat">Edges: <strong>{{ graph.num_edges }}</strong></span>
+    </div>
+
+    <div class="graph-legend">
+        <h3>Legend</h3>
+        <div class="legend-items">
+            {% for name in graph.class_names %}
+            <span class="legend-item">
+                <span class="legend-color" style="background:
+                    {% if loop.index0 == 0 %}#4CAF50
+                    {% elif loop.index0 == 1 %}#FF9800
+                    {% elif loop.index0 == 2 %}#F44336
+                    {% elif loop.index0 == 3 %}#9C27B0
+                    {% else %}#607D8B{% endif %}">
+                </span>
+                {{ name }}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="graph-container" class="graph-container"></div>
+
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if not graph.error %}
+<script>
+    var nodes = new vis.DataSet({{ graph.nodes | safe }});
+    var edges = new vis.DataSet({{ graph.edges | safe }});
+
+    var container = document.getElementById("graph-container");
+    var data = { nodes: nodes, edges: edges };
+    var options = {
+        nodes: {
+            shape: "dot",
+            size: 8,
+            color: {
+                background: "#1a73e8",
+                border: "#0d47a1",
+                highlight: { background: "#64b5f6", border: "#1565c0" }
+            },
+            font: { size: 10, color: "#ccc" }
+        },
+        edges: {
+            arrows: { to: { enabled: true, scaleFactor: 0.5 } },
+            width: 1.5,
+            smooth: { type: "continuous" }
+        },
+        physics: {
+            forceAtlas2Based: {
+                gravitationalConstant: -30,
+                centralGravity: 0.005,
+                springLength: 100,
+                springConstant: 0.08
+            },
+            maxVelocity: 50,
+            solver: "forceAtlas2Based",
+            timestep: 0.35,
+            stabilization: { iterations: 150 }
+        },
+        interaction: {
+            hover: true,
+            tooltipDelay: 200,
+            zoomView: true,
+            dragView: true
+        }
+    };
+
+    var network = new vis.Network(container, data, options);
+</script>
+{% endif %}
+{% endblock %}

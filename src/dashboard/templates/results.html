@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}GNN-IDS — Model Results{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h1>Model Comparison</h1>
+    <p class="section-subtitle">
+        Performance comparison of Random Forest, XGBoost, and GAT models
+        on the CICIDS2017 test set.
+    </p>
+
+    {% if results.error %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ results.error }}
+    </div>
+    {% elif results.comparison_table %}
+
+    <div class="table-responsive">
+        {{ results.comparison_table | safe }}
+    </div>
+
+    {% if "comparison_chart.png" in plots %}
+    <div class="plot-container">
+        <h2>Performance Chart</h2>
+        <img src="/reports/comparison_chart.png" alt="Model Comparison Chart"
+             class="report-image">
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="alert alert-warning">
+        <strong>No results available.</strong> Run the model training and comparison scripts first.
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

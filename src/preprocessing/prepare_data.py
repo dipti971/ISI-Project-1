@@ -36,7 +36,7 @@ INPUT_PATH = os.path.join(PROJECT_ROOT, "data", "processed", "friday_clean.csv")
 OUTPUT_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 
 # Columns to drop (not useful as features)
-DROP_COLUMNS = ["Timestamp", "Attempted Category"]
+DROP_COLUMNS = ["Timestamp", "Attempted Category", "Src Port", "Dst Port"]
 
 # IP columns to preserve for graph construction (saved separately)
 IP_COLUMNS = ["Src IP dec", "Dst IP dec"]

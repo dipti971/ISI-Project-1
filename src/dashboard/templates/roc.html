@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}GNN-IDS — ROC Curves{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h1>ROC Curves</h1>
+    <p class="section-subtitle">
+        One-vs-Rest ROC curves with per-class AUC scores for each model.
+    </p>
+
+    {% if plots %}
+    <div class="plot-grid">
+        {% for filename, display in plots.items() %}
+        <div class="plot-card">
+            <img src="/reports/{{ filename }}" alt="{{ filename }}"
+                 class="report-image">
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <strong>No ROC curve plots found.</strong>
+        Run the model comparison script first.
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

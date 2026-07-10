@@ -6,3 +6,6 @@ xgboost
 torch
 torch_geometric
 flask
+matplotlib
+seaborn
+joblib

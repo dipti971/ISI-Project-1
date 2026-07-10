@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}GNN-IDS — Confusion Matrices{% endblock %}
+
+{% block content %}
+<section class="content-section">
+    <h1>Confusion Matrices</h1>
+    <p class="section-subtitle">
+        Confusion matrices for each model showing classification accuracy per class.
+    </p>
+
+    {% if plots %}
+    <div class="plot-grid">
+        {% for filename, display in plots.items() %}
+        <div class="plot-card">
+            <img src="/reports/{{ filename }}" alt="{{ filename }}"
+                 class="report-image">
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <strong>No confusion matrix plots found.</strong>
+        Run the model comparison script first.
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

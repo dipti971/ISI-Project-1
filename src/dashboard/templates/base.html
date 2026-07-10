@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GNN-Based Network Intrusion Detection System Dashboard">
+    <title>{% block title %}GNN-IDS Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">🛡️</span>
+            <span class="nav-title">GNN-IDS</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/" class="{% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+            <li><a href="/graph" class="{% if request.endpoint == 'graph' %}active{% endif %}">Graph</a></li>
+            <li><a href="/results" class="{% if request.endpoint == 'results' %}active{% endif %}">Results</a></li>
+            <li><a href="/confusion" class="{% if request.endpoint == 'confusion' %}active{% endif %}">Confusion</a></li>
+            <li><a href="/roc" class="{% if request.endpoint == 'roc' %}active{% endif %}">ROC</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>GNN-Based Network Attack Detection &mdash; CICIDS2017 Dataset</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
