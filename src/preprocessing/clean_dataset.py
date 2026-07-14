@@ -1,52 +1,63 @@
+import os
+import numpy as np
 import pandas as pd
 
-# ==========================
-# Load Dataset
-# ==========================
+# ======================================================
+# Configuration
+# ======================================================
 
-DATA_PATH = r"C:\Users\soham\Downloads\ISI Project\data\raw\friday.csv"
+DATA_PATH = r"/home/soham/Downloads/ISI Project/data/raw/friday.csv"
+
+OUTPUT_PATH = r"/home/soham/Downloads/ISI Project/data/processed/friday_clean.csv"
+
+# ======================================================
+# Load Dataset
+# ======================================================
 
 print("=" * 60)
-print("Loading Dataset...")
+print("LOADING DATASET")
 print("=" * 60)
 
 df = pd.read_csv(DATA_PATH)
 
-# Remove extra spaces from column names
 df.columns = df.columns.str.strip()
 
 print("Dataset Loaded Successfully!")
 
-# ==========================
-# Original Dataset Shape
-# ==========================
+# ======================================================
+# Original Shape
+# ======================================================
 
 print("\n" + "=" * 60)
 print("ORIGINAL DATASET")
 print("=" * 60)
 
-print("Rows   :", df.shape[0])
-print("Columns:", df.shape[1])
+print(f"Rows    : {df.shape[0]}")
+print(f"Columns : {df.shape[1]}")
 
-# ==========================
+# ======================================================
 # Remove Duplicate Rows
-# ==========================
+# ======================================================
 
-print("\nRemoving duplicate rows...")
+print("\n" + "=" * 60)
+print("REMOVING DUPLICATE ROWS")
+print("=" * 60)
 
 duplicates = df.duplicated().sum()
 
-print("Duplicate Rows Found:", duplicates)
+print(f"Duplicate Rows Found : {duplicates}")
 
 df = df.drop_duplicates()
 
-print("Duplicate Rows Removed!")
+print(f"Remaining Rows : {df.shape[0]}")
 
-# ==========================
+# ======================================================
 # Remove Constant Columns
-# ==========================
+# ======================================================
 
-print("\nRemoving constant columns...")
+print("\n" + "=" * 60)
+print("REMOVING CONSTANT COLUMNS")
+print("=" * 60)
 
 constant_columns = []
 
@@ -56,35 +67,92 @@ for col in df.columns:
 
         constant_columns.append(col)
 
-print("Constant Columns:")
+print("Constant Columns Found:")
 
 for col in constant_columns:
-    print(col)
+    print(" -", col)
 
-df = df.drop(columns=constant_columns)
+df.drop(columns=constant_columns, inplace=True)
 
-print("Constant Columns Removed!")
+print(f"Removed {len(constant_columns)} constant columns.")
 
-# ==========================
-# Final Dataset Shape
-# ==========================
+# ======================================================
+# Missing Values
+# ======================================================
 
 print("\n" + "=" * 60)
-print("CLEANED DATASET")
+print("MISSING VALUE CHECK")
 print("=" * 60)
 
-print("Rows   :", df.shape[0])
-print("Columns:", df.shape[1])
+missing = df.isnull().sum()
 
-# ==========================
-# Save Clean Dataset
-# ==========================
+missing = missing[missing > 0]
 
-OUTPUT_PATH = r"C:\Users\soham\Downloads\ISI Project\data\processed\friday_clean.csv"
+if len(missing) == 0:
+
+    print("No Missing Values Found.")
+
+else:
+
+    print(missing)
+
+    print("\nFilling Missing Values with Median...")
+
+    numeric_columns = df.select_dtypes(include=np.number).columns
+
+    for col in numeric_columns:
+
+        df[col].fillna(df[col].median(), inplace=True)
+
+# ======================================================
+# Infinite Values
+# ======================================================
+
+print("\n" + "=" * 60)
+print("INFINITE VALUE CHECK")
+print("=" * 60)
+
+numeric_df = df.select_dtypes(include=np.number)
+
+inf_count = np.isinf(numeric_df).sum().sum()
+
+print(f"Infinite Values Found : {inf_count}")
+
+if inf_count > 0:
+
+    numeric_df = numeric_df.replace([np.inf, -np.inf], np.nan)
+
+    numeric_df = numeric_df.fillna(numeric_df.median())
+
+    df[numeric_df.columns] = numeric_df
+
+    print("Infinite Values Replaced.")
+
+# ======================================================
+# Final Verification
+# ======================================================
+
+print("\n" + "=" * 60)
+print("FINAL DATASET")
+print("=" * 60)
+
+print(f"Rows    : {df.shape[0]}")
+print(f"Columns : {df.shape[1]}")
+
+print(f"Missing Values : {df.isnull().sum().sum()}")
+
+numeric_df = df.select_dtypes(include=np.number)
+
+print(f"Infinite Values : {np.isinf(numeric_df).sum().sum()}")
+
+# ======================================================
+# Save Dataset
+# ======================================================
+
+os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
 
 df.to_csv(OUTPUT_PATH, index=False)
 
-print("\nClean dataset saved successfully!")
+print("\nClean Dataset Saved Successfully!")
 
-print("Location:")
 print(OUTPUT_PATH)
