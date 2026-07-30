@@ -8,7 +8,7 @@ import numpy as np
 DATA_PATH = r"C:\Users\soham\Downloads\ISI Project\data\raw\friday.csv"
 
 print("=" * 60)
-print("Loading Dataset...")
+print("Loading Dataset...") 
 print("=" * 60)
 
 df = pd.read_csv(DATA_PATH)
