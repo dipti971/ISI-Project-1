@@ -3,7 +3,7 @@
 Loads predictions from each model, computes metrics, generates
 comparison tables and visualizations.
 
-Usage:
+Usage:   
     python src/evaluation/compare_models.py
 """
 
