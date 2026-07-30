@@ -7,6 +7,6 @@ X = df.drop(columns=["Label"])
 
 print("="*50)
 print("Duplicate feature vectors")
-print("="*50)
+print("="*50)  
 
 print(X.duplicated().sum())
